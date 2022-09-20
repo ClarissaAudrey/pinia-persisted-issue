@@ -1,0 +1,127 @@
+image: docker:latest
+
+cache:
+  paths:
+    - node_modules/
+stages:
+  - Dockerize
+  - Check Code
+  - Build Staging
+  - Deploy Staging
+  - Build Production
+  - Deploy Production
+  - Run e2e tests
+
+Build Docker Base Image:
+  stage: Dockerize
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" -f Dockerfile .
+    - docker push "$CI_REGISTRY_IMAGE"
+  only:
+    changes:
+      - Dockerfile
+
+Audit NPM Dependencies:
+  stage: Check Code
+  image: $CI_REGISTRY_IMAGE:latest
+  script:
+    # The `--unsafe-perm` flag is needed as the CI user is root.
+    # The `auditci` command relies on `npx` so it does not need
+    # any npm dependencies to be installed beforehand.
+    - npm run --unsafe-perm auditci
+  # Allows failures in order to show a warning in the UI
+  allow_failure: true
+  only:
+    - merge_requests
+    - master
+
+Lint Code:
+  image: $CI_REGISTRY_IMAGE:latest
+  stage: Check Code
+  only:
+    - push
+    - branches
+    - merge_requests
+    - master
+  script:
+    - npm config set @friz-developers:registry https://gitlab.com/api/v4/packages/npm/
+    - npm config set "//gitlab.com/api/v4/packages/npm/:_authToken" "${CI_JOB_TOKEN}"
+    - npm install
+    - npm run lint
+  allow_failure: false
+
+Test Code:
+  image: $CI_REGISTRY_IMAGE:latest
+  stage: Check Code
+  only:
+    - push
+    - branches
+    - merge_requests
+    - master
+  script:
+    - npm config set @friz-developers:registry https://gitlab.com/api/v4/packages/npm/
+    - npm config set "//gitlab.com/api/v4/packages/npm/:_authToken" "${CI_JOB_TOKEN}"
+    - npm install
+    - npm run test:unit
+  allow_failure: false
+
+Build Staging:
+  image: $CI_REGISTRY_IMAGE:latest
+  stage: Build Staging
+  only:
+    - master
+  script:
+    - npm config set @friz-developers:registry https://gitlab.com/api/v4/packages/npm/
+    - npm config set "//gitlab.com/api/v4/packages/npm/:_authToken" "${CI_JOB_TOKEN}"
+    # Install dependencies
+    - npm ci
+    # Build App
+    - npm run build:staging
+  artifacts:
+    paths:
+      # Build folder
+      - dist/
+    expire_in: 1 hour
+
+Deploy Staging:
+  image: $CI_REGISTRY_IMAGE:latest
+  stage: Deploy Staging
+  only:
+    - master
+  script:
+    - aws s3 sync ./dist s3://$S3_BUCKET_STAGING
+    - aws cloudfront create-invalidation --distribution-id $STAGING_CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
+    - echo "Your code is deployed @ https://staging-dashboard.usefriz.com"
+
+Build Prod:
+  image: $CI_REGISTRY_IMAGE:latest
+  stage: Build Production
+  only:
+    - master
+  script:
+    - npm config set @friz-developers:registry https://gitlab.com/api/v4/packages/npm/
+    - npm config set "//gitlab.com/api/v4/packages/npm/:_authToken" "${CI_JOB_TOKEN}"
+    # Install dependencies
+    - npm ci
+    # Build App
+    - npm run build
+  artifacts:
+    paths:
+      # Build folder
+      - dist/
+    expire_in: 1 hour
+
+Deploy Production:
+  image: $CI_REGISTRY_IMAGE:latest
+  stage: Deploy Production
+  when: manual
+  only:
+    - master
+  script:
+    - aws s3 sync ./dist s3://$S3_BUCKET_PROD
+    - aws cloudfront create-invalidation --distribution-id $CLOUDFRONT_DISTRIBUTION_ID --paths "/*"
+    - echo "Your code is deployed @ https://dashboard.usefriz.com"
