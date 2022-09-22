@@ -12,25 +12,3 @@ module.exports = {
     },
   },
 };
-
-// if (process.env.NODE_ENV === "production") {
-//   module.exports.configureWebpack = {
-//     plugins: [
-//       new PrerenderSPAPlugin({
-//         staticDir: path.join(__dirname, "dist"),
-
-//         indexPath: path.join(__dirname, "dist", "index.html"),
-
-//         // Required - Routes to render.
-//         routes: ["/"],
-
-//         renderer: new Renderer({
-//           // Disabling timeout
-//           navigationOptions: {
-//             timeout: 0,
-//           },
-//         }),
-//       }),
-//     ],
-//   };
-// }
