@@ -1,4 +1,4 @@
-image: docker:latest
+image: docker run --rm -it -v ~/.aws:/root/.aws amazon/aws-cli
 
 cache:
   paths:
@@ -14,7 +14,7 @@ stages:
 
 Build Docker Base Image:
   stage: Dockerize
-  image: docker:latest
+  image: docker run --rm -it -v ~/.aws:/root/.aws amazon/aws-cli
   services:
     - docker:dind
   script:
