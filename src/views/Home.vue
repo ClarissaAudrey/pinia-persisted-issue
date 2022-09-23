@@ -5,14 +5,6 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
+<script setup lang="ts">
 import WelcomeFriz from "@/components/WelcomeFriz.vue";
-
-@Options({
-  components: {
-    WelcomeFriz,
-  },
-})
-export default class Home extends Vue {}
 </script>

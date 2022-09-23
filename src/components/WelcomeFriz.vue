@@ -1,22 +1,15 @@
+<script setup lang="ts">
+defineProps<{
+  msg: string;
+}>();
+</script>
+
 <template>
   <div class="friz">
     <h1>{{ msg }}</h1>
     <p>-- Coming Soon --</p>
   </div>
 </template>
-
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
-
-@Options({
-  props: {
-    msg: String,
-  },
-})
-export default class WelcomeFriz extends Vue {
-  msg!: string;
-}
-</script>
 
 <style lang="scss">
 .friz {
