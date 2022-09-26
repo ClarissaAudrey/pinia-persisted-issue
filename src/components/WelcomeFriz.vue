@@ -1,15 +1,15 @@
-<script setup lang="ts">
-defineProps<{
-  msg: string;
-}>();
-</script>
-
 <template>
   <div class="friz">
     <h1>{{ msg }}</h1>
     <p>-- Coming Soon --</p>
   </div>
 </template>
+
+<script setup lang="ts">
+defineProps<{
+  msg: string;
+}>();
+</script>
 
 <style lang="scss">
 .friz {
