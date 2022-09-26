@@ -1,7 +1,7 @@
-import { ref } from "vue";
+import { reactive } from "vue";
 import { defineStore } from "pinia";
 
-const user = ref({
+const user = reactive({
   authKey: "",
 });
 
@@ -10,7 +10,7 @@ export const useUserStore = defineStore({
   state: () => user,
   actions: {
     setAuthKey(newAuthKey: string) {
-      user.value.authKey = newAuthKey;
+      user.authKey = newAuthKey;
     },
   },
   persist: true,
