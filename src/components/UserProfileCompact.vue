@@ -3,21 +3,28 @@
     <div class="avatar">
       <p>{{ initial }}</p>
     </div>
-    {{ username }}
+
+    <p class="user-profile-compact-username">
+      {{ username }}
+    </p>
   </div>
 </template>
 
-<script lang="ts">
-import { Options, Vue } from "vue-class-component";
-
-@Options({
-  props: {
-    initial: String,
-    username: String,
-  },
-})
-export default class UserProfileCompact extends Vue {
-  msg!: string;
-  username!: string;
-}
+<script setup lang="ts">
+defineProps<{
+  initial: string;
+  username: string;
+}>();
 </script>
+
+<style lang="scss">
+.user-profile-compact {
+  @include flexCenter;
+  flex-direction: column;
+
+  &-username {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+  }
+}
+</style>
