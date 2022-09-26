@@ -1,7 +1,14 @@
+/** 
+* Mixins import should always be the first ones to be defined. 
+* This is due to import issues that might occur in other 
+* stylesheets when we try and use the mixin.
+*/
+@import "mixin/flexCenter";
+
 @import "base/colors";
 @import "base/resolutions";
 @import "base/typography";
 
-@import "base/mixin/flexcenter";
-
 @import "components/avatar";
+
+@import "elements/routerLink";
