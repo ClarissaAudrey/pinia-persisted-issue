@@ -1,14 +1,19 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../views/Home.vue";
-import User from "../views/User.vue";
+import HomeScreen from "../views/HomeScreen.vue";
+import UserScreen from "../views/UserScreen.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
-      name: "home",
-      component: Home,
+      name: "HomeScreen",
+      component: HomeScreen,
+    },
+    {
+      path: "/user/:username",
+      name: "UserScreen",
+      component: UserScreen,
     },
   ],
 });
