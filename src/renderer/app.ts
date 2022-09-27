@@ -1,12 +1,13 @@
-import { createSSRApp, defineComponent, h } from 'vue'
-import PageShell from './PageShell.vue'
-import { setPageContext } from './usePageContext'
-import type { PageContext } from './types'
+import { createSSRApp, defineComponent, h } from "vue";
+import PageShell from "./PageShell.vue";
+import { setPageContext } from "./usePageContext";
+import type { PageContext } from "./types";
+import { createPinia } from "pinia";
 
-export { createApp }
+export { createApp };
 
 function createApp(pageContext: PageContext) {
-  const { Page, pageProps } = pageContext
+  const { Page, pageProps } = pageContext;
   const PageWithLayout = defineComponent({
     render() {
       return h(
@@ -14,17 +15,20 @@ function createApp(pageContext: PageContext) {
         {},
         {
           default() {
-            return h(Page, pageProps || {})
-          }
+            return h(Page, pageProps || {});
+          },
         }
-      )
-    }
-  })
+      );
+    },
+  });
 
-  const app = createSSRApp(PageWithLayout)
+  const app = createSSRApp(PageWithLayout);
 
   // Make `pageContext` available from any Vue component
-  setPageContext(app, pageContext)
+  setPageContext(app, pageContext);
 
-  return app
+  const store = createPinia();
+  app.use(store);
+
+  return { app, store };
 }

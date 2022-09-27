@@ -1,11 +1,12 @@
-import { createApp } from './app'
-import type { PageContextClient } from './types'
+import { createApp } from "./app";
+import type { PageContextClient } from "./types";
 
-export { render }
+export { render };
 
 async function render(pageContext: PageContextClient) {
-  const app = createApp(pageContext)
-  app.mount('#app')
+  const { app, store } = createApp(pageContext);
+  store.state.value = pageContext.initialStoreState;
+  app.mount("#app");
 }
 
 /* To enable Client-side Routing:
