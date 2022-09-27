@@ -47,7 +47,7 @@ async function render(pageContext: PageContextServer) {
   };
 }
 
-async function onBeforeRender(pageContext: PageContext) {
+export async function onBeforeRender(pageContext: PageContext) {
   const { app, store } = createApp(pageContext);
 
   const stream = renderToNodeStream(app);
