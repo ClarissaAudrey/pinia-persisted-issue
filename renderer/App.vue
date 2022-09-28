@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <router-view />
+    <div class="content"><slot /></div>
   </div>
 </template>
 
 <style lang="scss">
 html {
-  font-family: "Avenir", sans-serif;
+  font-family: "Lato", sans-serif;
   font-size: 10px;
   word-spacing: 1px;
   -ms-text-size-adjust: 100%;
@@ -32,7 +32,7 @@ html {
   h4,
   h5,
   h6 {
-    font-family: "AvenirHeader", sans-serif;
+    font-family: "Montserrat", sans-serif;
   }
 }
 </style>

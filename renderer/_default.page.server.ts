@@ -1,7 +1,7 @@
 import { renderToString } from "@vue/server-renderer";
 import { escapeInject, dangerouslySkipEscape } from "vite-plugin-ssr";
 import { createApp } from "./app";
-import logoUrl from "./logo.svg";
+import logoUrl from "./friz-logo.svg";
 import type { PageContext, PageContextServer } from "./types";
 import { renderToNodeStream } from "@vue/server-renderer";
 
@@ -20,7 +20,7 @@ async function render(pageContext: PageContextServer) {
 
   // See https://vite-plugin-ssr.com/head
   const { documentProps } = pageContext.exports;
-  const title = (documentProps && documentProps.title) || "Vite SSR app";
+  const title = (documentProps && documentProps.title) || "Friz Dashboard v2";
   const desc =
     (documentProps && documentProps.description) ||
     "App using Vite + vite-plugin-ssr";

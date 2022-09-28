@@ -10,8 +10,7 @@ export const useUserStore = defineStore({
   state: () => user,
   actions: {
     setAuthKey(newAuthKey: string) {
-      user.authKey = newAuthKey;
+      this.authKey = newAuthKey;
     },
   },
-  persist: true,
 });

@@ -1,8 +1,9 @@
 import { createSSRApp, defineComponent, h } from "vue";
-import PageShell from "./PageShell.vue";
+import App from "./App.vue";
 import { setPageContext } from "./usePageContext";
 import type { PageContext } from "./types";
 import { createPinia } from "pinia";
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 
 export { createApp };
 
@@ -11,7 +12,7 @@ function createApp(pageContext: PageContext) {
   const PageWithLayout = defineComponent({
     render() {
       return h(
-        PageShell,
+        App,
         {},
         {
           default() {
@@ -28,6 +29,7 @@ function createApp(pageContext: PageContext) {
   setPageContext(app, pageContext);
 
   const store = createPinia();
+  store.use(piniaPluginPersistedstate);
   app.use(store);
 
   return { app, store };
